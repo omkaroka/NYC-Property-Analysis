@@ -1,0 +1,801 @@
+---
+title: "**NYC Property Sales**"
+author: "**Omkar Oka**"
+date: "**01/09/2021**"
+mainfont: Arial
+papersize: a3
+output:
+  pdf_document: 
+    fig_width: 10
+    fig_height: 10
+    toc: yes
+    number_sections: yes
+    latex_engine: xelatex
+    keep_tex: yes
+    highlight: tango
+    
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+\newpage
+
+# **Executive Summary:**  
+
+New York City is repeatedly named as among the most expensive cities in the world to buy real estate. CNBC 15’s recent article on the most expensive places in the US to buy a home included three neighborhoods from NYC. With the NYC Property Sales Dataset, the New York City Department of Finance opened up its real estate market for analysis.
+
+The Dataset contains information of all the property sales in NYC from September 1, 2016 to August 31, 2017. With such a recent data set, I was able to analyze trends about NYC real estate market borough and neighborhood-wise.
+
+Analysis Methodology:
+
+My analysis of the NYC Real estate market is broken down into the following sections.
+
+Exploratory Data Analysis - Variables such as Borough, Neighborhood, Age of the building/property, Size of property and type of building are the important ones that I explored majorly. The descriptive statistics section speaks about the distribution of each variable and makes necessary changes for the analysis. I’ve also tried to isolate any potential outliers for the variable that will need special attention.
+
+Visualization of results - The visualization section is split into a few broad categories for need of clarity. The tabs within the viz section explore one variable at a time with respect to the important numerical fields.
+
+Most In-Demand Borough - Where did New Yorkers buy their properties last year?  
+Most In-Demand Neighborhood - Which neighborhood do New Yorkers prefer?  
+The Hottest Buildings - What kind of properties do they buy?  
+Property sizes in NYC/ Square footage - Does more money mean larger properties in NYC?  
+Age of the buildings in NYC - Does more money mean newer properties in NYC?  
+Visualizing each of these plots showed me that many of these variables will be an important predictor of Sales Price, forming the basis for a potential predictive modeling.  
+
+We will attempt to predict the prices using Linear Regression and document the results with future plans and recommendations.  
+
+# **Data Preparation:**  
+
+The NYC Property Sales Dataset is a record of every building or apartment unit that was sold in the NYC Property market over a 12 month period.
+
+The dataset was downloaded from Kaggle. As this data set is a relatively cleaned- up version of the original NYC Department of Finance’s dataset it has been included as an attachment with the file submitted as part of this project.
+
+Loading all the required libraries and the data frame from the CSV file.
+```{r NYC_Data, message = FALSE, warning = FALSE}
+
+if(!require(tidyverse)) 
+  install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+if(!require(caret)) 
+  install.packages("caret", repos = "http://cran.us.r-project.org")
+if(!require(data.table)) 
+  install.packages("data.table", repos = "http://cran.us.r-project.org")
+if(!require(anytime)) 
+  install.packages("anytime", repos = "http://cran.us.r-project.org")
+if(!require(lubridate)) 
+  install.packages("lubridate", repos = "http://cran.us.r-project.org")
+if(!require(corrr)) 
+  install.packages("corrr", repos = "http://cran.us.r-project.org")
+if(!require(knitr)) 
+  install.packages("knitr", repos = "http://cran.us.r-project.org")
+if(!require(corrplot)) 
+  install.packages("corrplot", repos = "http://cran.us.r-project.org")
+if(!require(randomForest)) 
+  install.packages("randomForest", repos = "http://cran.us.r-project.org")
+
+#Loading Libraries:
+library("stringr")
+library("tidyverse")
+library("caret")
+library("anytime")
+library("lubridate")
+library("corrr")
+library("knitr")
+library("corrplot")
+library("randomForest")
+options("scipen" = 10)
+
+nyc <- 
+  as_data_frame(fread("C:/Users/omkar.oka/Desktop/DataScience/NYC House/nyc-rolling-sales.csv")) 
+##Replace the path with your local computer path while executing the code.
+
+```
+
+\newpage
+  
+The NYC Property Sales Data has 84548 observations and 22 variables. It has property sales data of each of the 5 boroughs in NYC - Manhattan, the Bronx, Queens, Brookyln and Staten Island.
+
+```{r structure, message = FALSE, warning = FALSE}
+str(nyc)
+```
+
+```{r dups,  message = FALSE, warning = FALSE}
+nyc <- nyc %>% select(-V1) ##Removing Row ID column V1
+dup <- nyc %>% filter(duplicated(nyc) == TRUE) %>% nrow()
+```
+
+Total number of duplicate rows: `r dup`  
+\newpage
+   
+## **Data Cleanup**  
+Based on the number of duplicates its safe to assume that they are just duplicate entries and hold no significance. Hence we can drop these rows.  
+Also we will split the `SALE DATE` into date and time components and just drop the time component, since time does not affect the price of the property.
+On further analysis we can see that the `EASE-MENT` column has no data and can be dropped.  
+
+### **Cleaned up Data**   
+```{r cleanup,  message = FALSE, warning = FALSE, echo = FALSE}
+nyc <- nyc %>%
+  separate(col = "BUILDING CLASS CATEGORY", into = c("BUILDING CLASS CATEGORY NUMBER",
+                                                     "BUILDING CLASS CATEGORY"), sep = 3) %>%
+  separate(col = "SALE DATE", into = c("SALE DATE", "TIME"), sep = " ")
+#Separating the Building class category into the category and its unique identifier number
+nyc <- nyc[,c(-8,-23)] #removing columns 'EASE-MENT' and 'TIME OF SALE'
+nyc <- unique(nyc)
+str(nyc)
+```
+  
+After removing the unnecessary columns, we will create a new column called `Building Age` transforming the variable, `Year Built` and `SALE DATE`. 
+Building age is a much clearer metric to understand.  
+
+```{r Building_Age,  message = FALSE, warning = FALSE}
+nyc <- nyc %>% mutate(`BUILDING AGE` = as.integer(format(as.Date(`SALE DATE`, format="%Y-%m-%d"),"%Y")) - `YEAR BUILT`)
+# Creating a new column called 'Building Age' transforming the variable, 'Year Built'
+```
+  
+\newpage  
+  
+  
+## **Data Conversion**
+We will be converting the character and discrete numeric columns to factors. Converting the character columns that have numbers to numeric and some columns to character for further analysis.  
+
+```{r conversion,  message = FALSE, warning = FALSE, echo=FALSE}
+fac <- c(1,3,4,5,8,11,18,19)
+nyc <- nyc %>% mutate_at(fac, funs(factor(.)))
+levels(nyc$BOROUGH) <- c("Manhattan", "Bronx", "Brooklyn", "Queens", "Staten Island")#We will be converting the character and discrete numeric columns to factors.
+num <- c(15,16,17,20)
+nyc <- nyc %>% mutate_at(num, funs(as.numeric(.)))
+
+chr <- c(6,7)
+nyc <- nyc %>% mutate_at(chr, funs(as.character(.)))
+#Converting the character columns that have numbers to numeric and 
+##some columns to character for further analysis.  
+
+nyc$`SALE DATE` <- as.Date(nyc$`SALE DATE`, format="%Y-%m-%d")
+str(nyc)
+```
+  
+
+  
+
+```{r sale_prep, message = FALSE, warning = FALSE, echo= FALSE}
+nyc_data <- nyc #Keeping backup in case we need to revert back
+
+nyc <- nyc_data %>% filter((!`SALE PRICE` == 0) & !is.na(`SALE PRICE`)) 
+#Removing the Sale Price of zero and NA since these are just Property transfers
+
+
+```
+
+
+## **Data Description**  
+```{r Data_Description, message = FALSE, warning = FALSE, echo= FALSE}
+variable.type <- lapply(nyc, class)
+options(width = 60)
+
+
+variable.description <- c("Name of the borough where the property is located", 
+"Neighbourhood name", "Building class category code to identify similar properties", 
+"Building class category title to identify similar properties", 
+"Assigned tax class of the property - Classes 1, 2, 3 or 4", 
+"Sub-division of the borough for property location", 
+"Sub-division of a Tax Block for every property location",
+"Used to describe a property's constructive use", "Property's street address", 
+"Property's apartment number", "Property's postal code", 
+"Number of residential units at the listed property",
+"Number of commercial units at the listed property",
+"Total number of units at the listed property", 
+"Land area of the property listed in square feet", 
+"Total area of all the floors of a building", "Property's construction year", 
+"Assigned tax class of the property at sale",
+"Used to describe a property's constructive use at sale",
+"Price paid for the property", "Date of property sale", "Age of the Building")
+
+variable.name <- colnames(nyc)
+
+nyc_datadesc <- as_data_frame(cbind(variable.name, variable.type, variable.description))
+colnames(nyc_datadesc) <- c("Variable Name","Data Type","Variable Description")
+library(knitr)
+kable(nyc_datadesc)
+
+```
+\newpage
+  
+  
+# **Data Analysis**  
+**1. Sale Price**
+
+```{r sale_analysis, message = FALSE, warning = FALSE, echo= FALSE}
+quantile(nyc$`SALE PRICE`, probs = seq(from = 0, to = 1, by = .1))
+```
+
+  
+```{r sale_price_1000, message = FALSE, warning = FALSE, echo= FALSE}
+nyc %>% filter(`SALE PRICE` <= 1000) %>% nrow()
+```
+  
+Dropping records with sale price less than $1000 since these are clear anomalies / outliers based on the distribution we see above.
+
+After dropping the records we can see that the distribution has shifted and does not have an extreme low point anymore.
+
+```{r sale_price cleanup, message = FALSE, warning = FALSE, echo= FALSE}
+## Remove sale price < 1000$
+nyc <- nyc %>% filter(!`SALE PRICE` <= 1000)  
+
+quantile(nyc$`SALE PRICE`, probs = seq(from = 0, to = 1, by = .1))
+```
+  
+  
+**2. Land Square Feet**
+
+```{r land_sq_ft1, message = FALSE, warning = FALSE, echo= FALSE}
+summary(nyc$`LAND SQUARE FEET`)
+```
+
+This is the overall distribution:  
+
+```{r land_sq_ft2, message = FALSE, warning = FALSE, echo= FALSE}
+quantile(nyc$`LAND SQUARE FEET`, probs = seq(from = 0, to = 1, by = .1), na.rm = TRUE)
+
+
+```
+  
+  We can clearly deduce that 4252327.0 is an outlier in this dataset for Land Square Feet. Assuming a ball-park value that buildings that have > 500,000 land sq footage must be Commercial Vacant lands, Store Buildings and other large properties.
+
+
+**3. Gross Square Feet**
+  
+```{r gross_sq_ft1, message = FALSE, warning = FALSE, echo= FALSE}
+summary(nyc$`GROSS SQUARE FEET`)
+```
+
+
+This is the overall distribution:  
+
+```{r gross_sq_ft2, message = FALSE, warning = FALSE, echo= FALSE}
+quantile(nyc$`GROSS SQUARE FEET`, probs = seq(from = 0, to = 1, by = .1), na.rm = TRUE)
+
+```
+   
+Similar to land square foot there are outliers for gross square feet as well which are vacant lands or large properties like warehouses.
+
+
+**4. Residential Units, Commercial Units and Total Units**
+
+**Residential Units:**
+Summary:  
+
+```{r units1, message = FALSE, warning = FALSE, echo= FALSE}
+
+summary(nyc$`RESIDENTIAL UNITS`)
+```
+
+Distribution:  
+
+```{r units2, message = FALSE, warning = FALSE, echo= FALSE}
+nyc %>% filter(`RESIDENTIAL UNITS` > 5) %>% nrow()
+```
+
+**Commercial Units:**  
+Summary:  
+
+```{r units3, message = FALSE, warning = FALSE, echo= FALSE}
+
+summary(nyc$`COMMERCIAL UNITS`)
+```
+
+In the entire data set, there are only 1376 buildings in which more than 5 Residential units were sold in 2016. In the entire data set, there are only 140 buildings in which more than 5 Commercial units were sold in 2016.
+
+As explored earlier, we know that only for 794 properties, Total Units is not equal to Residential, Commercial Units. As Total Units has the least NAs, we will be using this field for further analysis.
+
+
+**5. Building Age**
+
+There are 4195 properties with Building age. When we remove properties that don’t have a Year Built entry or Year Built = 0, we get 28 property details.
+
+Summary for Building Age:  
+
+```{r building_age1, message = FALSE, warning = FALSE, echo= FALSE}
+summary(nyc$`BUILDING AGE`)
+```
+
+Summary for Year Built:  
+
+```{r building_age2, message = FALSE, warning = FALSE, echo= FALSE}
+summary(nyc$`YEAR BUILT`)
+```
+
+Number of Buildings more than 200 years old:  
+
+```{r building_age3, message = FALSE, warning = FALSE, echo= FALSE}
+nyc %>% filter(`BUILDING AGE` > 200 & `YEAR BUILT` != 0) %>% 
+  arrange(desc(`BUILDING AGE`)) %>% nrow()
+```
+
+\newpage
+  
+  
+# **Data Visualization**  
+
+**1. NYC Boroughs:**  
+```{r borough1, message = FALSE, warning = FALSE, echo= FALSE}
+ggplot(data = nyc, aes(x = `BOROUGH`, fill = `BOROUGH`)) +
+  geom_bar() +
+  ggtitle("Most In-Demand Borough in NYC", subtitle = "Borough-wise # of property sales in NYC") +
+  scale_y_continuous("# of Property Sales", labels = scales::comma) +
+  scale_x_discrete("Borough")
+```
+
+```{r borough2, message = FALSE, warning = FALSE, echo= FALSE}
+
+ggplot(data = nyc, aes(x = `BOROUGH`, y = mean(`SALE PRICE`), fill = `BOROUGH`)) +
+  geom_bar(stat = "identity") +
+  ggtitle("Most Expensive Borough in NYC", subtitle = "Borough-wise Avg Property Sale Price in NYC") +
+  scale_y_continuous("Avg Sale Price", labels = scales::dollar) +
+  scale_x_discrete("Borough")
+
+
+```
+The plots above show that Queens has the most number of property sales, followed by Brookyln. The Average Sale Price of a property in Queens was $27 billion, while in Manhattan was $22 billion. This is surprising as properties in Manhattan are expected to cost more. Let’s explore this further with the other fields.
+
+
+```{r borough3, message = FALSE, warning = FALSE, echo= FALSE}
+
+nyc %>% group_by(BOROUGH, NEIGHBORHOOD) %>% summarise(SOLD = n()) %>% arrange(desc(SOLD)) %>% head(10) %>% 
+        ggplot(aes(x = `NEIGHBORHOOD`, y = SOLD, fill = `BOROUGH`)) + geom_bar(position = 'dodge', stat='identity') +
+  ggtitle("Top 10 boroughs as per number of sold properties") +
+     geom_text(aes(label=SOLD), position=position_dodge(width=0.9), hjust=-0.25) + coord_flip() +
+  theme(legend.position = "bottom")
+```
+  
+The Flushing North region of the Queens borough has the most number of units sold which might be a new neighborhood promoted by the government civilization program.  
+\newpage
+
+**2. Neighborhoods:**
+
+With the exploration of the property sales and prices across Boroughs in NYC, lets see how the numbers divide up with respect to each Neighborhood. We can start answering this by looking at the Number of Sales and Average property Sales Prices across the most in-demand neighborhoods.
+
+Most-in demand and Expensive Neighborhood in NYC
+
+```{r neighbrhd1, message = FALSE, warning = FALSE, echo= FALSE}
+df1 <- as.data.frame(table(nyc$BOROUGH, nyc$NEIGHBORHOOD))
+names(df1) <- c('BOROUGH','NEIGHBORHOOD', 'Freq')
+df1 <- df1 %>% arrange(desc(Freq)) %>% head(10)
+
+ggplot(df1, aes(x = `NEIGHBORHOOD`, y = `Freq`, fill = `BOROUGH`)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  ggtitle("Most-in demand Neighborhood in NYC", subtitle = "Top Neighborhoods by Number") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous("# of Sales", labels = scales::comma) +
+  scale_x_discrete("Neighborhood") 
+```
+
+```{r neighbrhd2, message = FALSE, warning = FALSE, echo= FALSE}
+df2 <- 
+  nyc %>% group_by(BOROUGH, NEIGHBORHOOD) %>% 
+  summarise(MeanSP = mean(`SALE PRICE`)) %>% 
+  arrange(desc(MeanSP)) %>% head(10)
+
+ggplot(data = df2, aes(x = `NEIGHBORHOOD`, y = MeanSP, fill = `BOROUGH`)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme(legend.position = "bottom") +
+  ggtitle("Most Expensive Neighborhoods in NYC", 
+          subtitle = "Top Neighborhoods by Avg Price") +
+  scale_y_continuous("Avg Sale Price", labels = scales::dollar) +
+  scale_x_discrete("Neighborhood") 
+```
+
+Consistent with the previous plots, the Top Neighborhoods by number of Property Sales in 2016 plot shows that neighborhoods in Queens and Manhattan had the most number of properties sold - this accounted to 7 out of the 10 top neighborhoods.
+
+With respect to the Average value of properties sold in different neighborhoods, Bloomfield in Staten Island was the top. Staten Island, however, was among the lowest when we arranged the Average Sale Price according to Borough. So these properties must have been the top 20% of the Sale Price that we explored earlier. Also interesting to note is that 7 out the 10 top property value neighborhoods are from Manhattan. Clearly, even though no neighborhood in Queens fetched top bucks last year, it sold much more properties than the other boroughs.
+
+Also note that the average price of the Most expensive Neighborhood and the second most expensive by $12.5 billion. Needless to say, the standard deviation of the property prices in NYC is large!
+
+Lets check this by plotting the least expensive neighborhoods.  
+
+
+```{r neighbrhd3, message = FALSE, warning = FALSE, echo= FALSE}
+df2 <- 
+  nyc %>% group_by(BOROUGH, NEIGHBORHOOD) %>% 
+  summarise(MeanSP = mean(`SALE PRICE`)) %>% 
+  arrange(MeanSP) %>% head(10)
+
+ggplot(data = df2, aes(x = `NEIGHBORHOOD`, y = MeanSP, fill = `BOROUGH`)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme(legend.position = "bottom") +
+  ggtitle("Least Expensive Neighborhoods in NYC", subtitle = "Top Neighborhoods by the lowest avg. Price") +
+  scale_y_continuous("Avg Sale Price", labels = scales::dollar) +
+  scale_x_discrete("Neighborhood")  
+```
+
+As expected, Staten Island, Queens and Bronx - the Boroughs that didn’t feature in the Top Borough list made it here. Interesting to note is the differences in the Average Sale Price scale of the Most and the Least expensive properties in NYC. The average property price in Van Cortlandt Park in the Bronx sold for $160,000, while the most expensive property in Staten Island, Bloomsfield sold for 46 billion dollars.  
+\newpage
+  
+  
+**3. Buildings:**  
+
+  
+With the knowledge of the demand and prices in neighborhoods across Boroughs, lets understand what kind of buildings get sold across NYC. This will clearly show what the hottest buildings around NYC are and their sale prices.  
+
+
+```{r building1, message = FALSE, warning = FALSE, echo= FALSE}
+df1 <- as.data.frame(table(nyc$BOROUGH, nyc$`BUILDING CLASS CATEGORY`))
+names(df1) <- c('BOROUGH','BUILDING CLASS CATEGORY', 'Freq')
+df1 <- df1 %>% group_by(BOROUGH) %>% arrange(desc(Freq)) %>% head(10)
+
+ggplot(df1, aes(x = `BOROUGH`, y = `Freq`, fill = `BUILDING CLASS CATEGORY`)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  ggtitle("Most In-Demand Buildings in NYC by Borough", subtitle = "Top types of Buildings sold in NYC") +
+  scale_y_continuous("# of Sales", labels = scales::comma) +
+  scale_x_discrete("Borough") 
+```
+Clearly, the most in-demand buildings in NYC over the years were one family dwellings, across Staten Island, Queens and Brooklyn. Coops in Elevator Apartments were also much wanted over the last year.  
+
+
+
+```{r building2, message = FALSE, warning = FALSE, echo= FALSE}
+df2 <- 
+  nyc %>% group_by(BOROUGH, `BUILDING CLASS CATEGORY`) %>% 
+  summarise(MeanSP = mean(`SALE PRICE`)) %>% 
+  arrange(desc(MeanSP)) %>% head(10)
+
+ggplot(data = df2, aes(x = `BUILDING CLASS CATEGORY`, y = MeanSP, fill = `BOROUGH`)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme(legend.position = "bottom") +
+  ggtitle("Most Expensive Buildings in NYC", subtitle = "Top Types of Property by Value") +
+  scale_y_continuous("Avg Sale Price", labels = scales::dollar) + scale_x_discrete("Building Type") 
+```
+
+Most of the top properties in Manhattan were commercial - Office buildings, Luxury Hotels, and other commercial classes, while the apartments and condos, though expensive, were on the cheaper side for Manhattan.
+
+Another clear pattern is that the most expensive buildings are almost entirely commercial buildings. Also note how the theaters in Queens are as expensive as Rental apartments in Manhattan.  
+
+To make the property price variance argument more solid, let’s explore how the least expensive buildings in NYC look.  
+ 
+
+```{r building3, message = FALSE, warning = FALSE, echo= FALSE}
+df2 <- 
+  nyc %>% group_by(BOROUGH, `BUILDING CLASS CATEGORY`) %>% 
+  summarise(MeanSP = mean(`SALE PRICE`)) %>% 
+  arrange(MeanSP) %>% head(10)
+
+ggplot(data = df2, aes(x = `BUILDING CLASS CATEGORY`, y = MeanSP, fill = `BOROUGH`)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  coord_flip() +
+  theme(legend.position = "bottom") +
+  ggtitle("Least Expensive Buildings in NYC", subtitle = "Lowest Types of Property by Value in NYC in 2016") +
+  scale_y_continuous("Avg Sale Price", labels = scales::dollar) +
+  scale_x_discrete("Building Type") 
+```
+
+The least expensive property in NYC is a Condo Parking space in Staten island. Interestingly, the most expensive and the least expensive buildings in NYC are commercial buildings. For $45,000 you could also buy a Condo Terrace in the Queens!
+
+**Tax Class of the Properties sold:**
+
+Adding another variable to the equation now, let’s look at the Tax Class of the Properties sold in NYC. There are 4 tax classes that Property sales are categorized into. Over the last year, there were no Tax Class, 3, property sales.
+
+Class 1: Includes most residential property of up to three units
+
+Class 2: Includes all other property that is primarily residential, such as cooperatives and condominiums.
+
+Class 3: Includes property with equipment owned by a gas, telephone or electric company
+
+Class 4: Includes all other properties not included in class 1,2, and 3, such as offices, factories, warehouses, garage buildings, etc.
+
+Here is a distribution of units sold across all tax classes categorized by boroughs:  
+
+```{r building4, message = FALSE, warning = FALSE, echo= FALSE}
+nyc %>% group_by(BOROUGH, `TAX CLASS AT TIME OF SALE`) %>% summarise(SOLD_UNITS = n()) %>% 
+        ggplot(aes(x = reorder(`TAX CLASS AT TIME OF SALE`, -SOLD_UNITS), y = SOLD_UNITS, fill = BOROUGH)) + geom_bar(stat = "identity", position = "dodge") +
+  ggtitle("Tax Class Distribution") +
+  theme(legend.position = "right") + scale_x_discrete("Tax Class")
+
+
+```
+
+\newpage
+  
+**4. Property Size:**
+We can already guess that the tentative Price/unit area varies with Neighborhood as well. To explore this metric, lets plot Sale Price vs Land square Feet, Sale Price vs Gross square Feet borough-wise. 
+
+Sale Price vs Land Square Feet:  
+
+```{r propsize1, message = FALSE, warning = FALSE, echo= FALSE}
+ggplot(data = nyc, aes(x = log(`LAND SQUARE FEET`), y = log(`SALE PRICE`), color = `BOROUGH`)) +
+  geom_jitter() +
+  geom_smooth(method = "lm") +
+  theme(legend.position = "bottom") +
+  facet_wrap(~ BOROUGH) +
+  ggtitle("Price Vs Land Square Footage in NYC", 
+          subtitle = "Distribution of Sale Price vs Land Square feet Borough-wise") +
+  scale_y_continuous("Property Sale Price", labels = scales::dollar) +
+  scale_x_continuous("Land Square Footage", labels = scales::comma)
+```
+They clearly have different patterns
+\newpage
+  
+Sale Price vs Gross Square Feet:  
+
+```{r propsize2, message = FALSE, warning = FALSE, echo= FALSE}
+ggplot(data = nyc, aes(x = log(`GROSS SQUARE FEET`), y = log(`SALE PRICE`), color = `BOROUGH`)) +
+  geom_jitter() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ BOROUGH) +
+  ggtitle("Price Vs Gross Square Footage in NYC",
+          subtitle = "Distribution of Sale Price vs Gross Square feet Borough-wise") +
+  scale_y_continuous("Property Sale Price", labels = scales::dollar) +
+  scale_x_continuous("Gross Square Footage", labels = scales::comma) +
+  theme(legend.position = "bottom")
+```
+
+
+The trends seem to largely be similar for Gross Square Footage and Land Square Footage except for the different trend in Manhattan.
+
+To complement the charts above, we can plot a metric ‘Price/unit area’ for all the Boroughs. This will be the clearest indicator of the price of a unit sq foot of space in NYC
+\newpage
+  
+  
+Price/sq. Feet in NYC:  
+
+```{r propsize3, message = FALSE, warning = FALSE, echo= FALSE}
+df1 <- nyc %>% filter(`LAND SQUARE FEET` != 0) %>%
+      mutate(PriceLSF = `SALE PRICE`/`LAND SQUARE FEET`) %>%
+      group_by(`BOROUGH`, `NEIGHBORHOOD`) %>%
+      summarise(MeanPriceLSF = mean(PriceLSF, na.rm = TRUE)) %>%
+      arrange(desc(MeanPriceLSF)) %>% head(15)
+
+ggplot(data = df1, aes(x = `NEIGHBORHOOD`, y = MeanPriceLSF, fill = `BOROUGH`)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme(legend.position = "bottom") +
+  ggtitle("NYC Price per Square Feet", subtitle = "Top Price/sqft Neighborhood") +
+  scale_y_continuous("Price/sqft", labels = scales::dollar) +
+  scale_x_discrete("Neighborhood") 
+```
+
+
+```{r propsize4, message = FALSE, warning = FALSE, echo= FALSE}
+df2 <- nyc %>% filter(`LAND SQUARE FEET` != 0) %>%
+  mutate(PriceLSF = `SALE PRICE`/`LAND SQUARE FEET`) %>%
+  group_by(`BOROUGH`, `NEIGHBORHOOD`) %>%
+  summarise(MeanPriceLSF = mean(PriceLSF, na.rm = TRUE)) %>%
+  arrange(MeanPriceLSF) %>% head(15)
+
+ggplot(data = df2, aes(x = `NEIGHBORHOOD`, y = MeanPriceLSF, fill = `BOROUGH`)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  theme(legend.position = "bottom") +
+  ggtitle("NYC Price per Square Feet", subtitle = "Lowest Price/sqft Neighborhood") +
+  scale_y_continuous("Price/ sqft", labels = scales::dollar) +
+  scale_x_discrete("Neighborhood")
+```
+
+
+Consistent with the analysis above, we can see all top 15 Price/sqft from Manhattan and a mojority of the Lowest Price/sqft from Staten Island. While the most expensive property in NYC sold at 16,000 dollars/sqft in Midtown CBD, the least expensive property was priced at 26 dollars/sqft.  
+\newpage
+  
+**5. Building Age:**
+
+Another important variable in the dataset is Building age. Exploring this variable will help us understand how Property prices fluctuate across Boroughs with the age of the building.
+
+We will plot the Distribution of Building age across each borough to figure where the older buildings in NYC are and then also plot the Sale Price vs Building age across each borough to identify if building age impacts the property sale price.
+
+```{r buildingage1, message = FALSE, warning = FALSE, echo= FALSE}
+
+nyc %>% filter(!`BUILDING AGE` >= 500) %>% ggplot(aes(`BUILDING AGE`, log(`SALE PRICE`), color = BOROUGH)) + geom_jitter() +
+geom_smooth() +
+theme(legend.position = "bottom")  + 
+ggtitle("Age of Properties vs Sale price") +
+scale_y_continuous("Sale Price in Log Scale", labels = scales::dollar)
+```
+
+The plot shows that only in Manhattan and the Bronx can we expect property prices to fall as the age of the Building increases. Building age might not even be a good predictor of Sale price for properties in the other Boroughs.  
+
+
+\newpage
+  
+# **Data Preparation and Correlation**
+## **Data Preparation**  
+To predict the NYC Property Price using this data set, we need to create a new data set for prediction removing all character values - such as Address, etc and retain only the fields that could help in prediction.
+
+We will also transform Sale date into the month in which the sale occurred for better aesthetics.  
+
+```{r dataprep, message = FALSE, warning = FALSE}
+nyc$`SALE MONTH` <- as.factor(months(nyc$`SALE DATE`))
+nyc$NEIGHBORHOOD <- as.factor(nyc$NEIGHBORHOOD)
+
+nyc_final <- nyc[, -c(3, 5, 6, 7, 8, 9, 10, 17, 19, 21)]
+nyc_final <- nyc_final[c(1:10, 12,13,11)]
+
+
+```
+
+
+## **Correlations**
+
+```{r corr1, message = FALSE, warning = FALSE, echo= FALSE}
+nyc_corr <- cor(nyc_final[sapply(nyc_final, is.numeric)], use = "complete.obs")
+
+```
+
+```{r corr2, message = FALSE, warning = FALSE, echo= FALSE}
+corrplot(nyc_corr, type = "upper",order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+```
+Clearly, Residential units - Total units - Gross Square Feet are highly correlated (> 0.7); Commercial units and Total units are also fairly correlated (0.577) Total units has high correlation with almost all variables.
+
+Land Square Feet and Gross Square Feet are highly correlated as well (0.664). Consider using Total units, instead of Residential units and Commercial units and Land Square Feet instead of Land Square Feet and Gross Square Feet.
+
+```{r corr3, message = FALSE, warning = FALSE, echo= FALSE}
+temp <- nyc_final[,c(1:4,10,12,13)]    
+num <- c(1:7)
+temp <- temp %>% mutate_at(num, funs(as.numeric(.)))
+
+```
+
+```{r corr4, message = FALSE, warning = FALSE, echo= FALSE}
+corrplot(cor(temp), type = "upper",order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+```
+Checking the correlation between the categorical variables shows some clear trends. Borough and Zip Code have high correlation (0.65) and Borough Class Category, Tax class has high correlation too (0.613).
+
+\newpage
+
+# **Predictive Analysis**  
+
+## **Final Data Preparation**  
+To predict the NYC Property Price using this data set, we have to start with creating a new data set for prediction removing all character values - such as Address, etc and retain only the fields that could help in prediction. We will also transform Sale date into the month in which the sale occurred to create another prediction dimension.  
+
+```{r pred_analysis1, message = FALSE, warning = FALSE, echo= FALSE}
+
+nyc$`SALE MONTH` <- as.factor(months(nyc$`SALE DATE`))
+
+nyc_pred <- nyc[, -c(3, 5, 6, 7, 8, 9, 10, 17, 19, 21)]
+nyc_pred$NEIGHBORHOOD <- as.factor(nyc_pred$NEIGHBORHOOD)
+
+nyc_pred <- nyc_pred[c(1:10, 12,13,11)]
+
+str(nyc_pred)
+```
+
+To begin with the modeling exercise, we will split the data set into an 80-20% training and test set.  
+
+```{r pred_analysis2, message = FALSE, warning = FALSE}
+
+set.seed(1)
+index <- sample(nrow(nyc_pred),nrow(nyc_pred)*0.80)
+nyc_pred.train <- nyc_pred[index,]
+nyc_pred.test <- nyc_pred[-index,]
+```
+
+## **Single Factor Linear Regression**  
+Running a full model Linear regression for this data set does not seem too appropriate as there are too many categorical predictors that will create lots of dummy variables. To check if they’re necessary we will use a single factor regression between the predictor and each response variable.  
+
+```{r pred_analysis3, message = FALSE, warning = FALSE}
+# 1. Single Factor Regression - Borough
+model1 <- lm(nyc_pred.train$`SALE PRICE` ~ nyc_pred.train$BOROUGH)
+res_borough <- summary(model1)
+
+res_borough
+```
+
+
+
+```{r pred_analysis3b, message = FALSE, warning = FALSE}
+pf(res_borough$fstatistic[1],res_borough$fstatistic[2],res_borough$fstatistic[3],lower.tail = FALSE)
+```
+The F statistic for Borough is significant.  
+
+
+```{r pred_analysis4, message = FALSE, warning = FALSE}
+# 2. Single Factor Regression - Neighborhood
+
+model1 <- lm(nyc_pred.train$`SALE PRICE` ~ nyc_pred.train$NEIGHBORHOOD)
+res_neigh <- summary(model1)
+
+# F-statistic p-value
+pf(res_neigh$fstatistic[1],res_neigh$fstatistic[2],res_neigh$fstatistic[3],lower.tail = FALSE)
+
+```
+
+\newpage  
+
+Only 4 neighborhoods are significant. Manually creating dummies for these categories and clubbing the rest under a Neighborhood ‘Others’ variable.  
+
+```{r pred_analysis5, message = FALSE, warning = FALSE}
+nyc_pred.train$N_BLOOMFIELD = ifelse(nyc_pred.train$NEIGHBORHOOD == "BLOOMFIELD", 1,0)
+nyc_pred.train$N_FASHION = ifelse(nyc_pred.train$NEIGHBORHOOD == "FASHION", 1,0)
+nyc_pred.train$`N_JAVITS CENTER` = ifelse(nyc_pred.train$NEIGHBORHOOD == "JAVITS CENTER", 1,0)
+nyc_pred.train$`N_MIDTOWN CBD` = ifelse(nyc_pred.train$NEIGHBORHOOD == "MIDTOWN CBD", 1,0)
+nyc_pred.train$`N_OTHERS` = ifelse((nyc_pred.train$NEIGHBORHOOD != "MIDTOWN CBD") &
+                                                       (nyc_pred.train$NEIGHBORHOOD != "JAVITS CENTER") &
+                                                       (nyc_pred.train$NEIGHBORHOOD != "FASHION") &
+                                                       (nyc_pred.train$NEIGHBORHOOD != "BLOOMFIELD"), 1,0)
+
+# Removing the original Neighborhood predictor
+nyc_pred.train <- nyc_pred.train[,-2] 
+```
+
+
+```{r pred_analysis6, message = FALSE, warning = FALSE}
+# 3. Single Factor Regression - BCC
+model1 <- lm(nyc_pred.train$`SALE PRICE` ~ nyc_pred.train$`BUILDING CLASS CATEGORY`)
+res_bcc <- summary(model1) 
+
+# F-statistic p-value
+pf(res_bcc$fstatistic[1],res_bcc$fstatistic[2],res_bcc$fstatistic[3],lower.tail = FALSE)
+```
+
+
+```{r pred_analysis7, message = FALSE, warning = FALSE}
+# 4. Single Factor Regression - Tax class
+model1 <- lm(nyc_pred.train$`SALE PRICE` ~ nyc_pred.train$`TAX CLASS AT TIME OF SALE`)
+res_tax <- summary(model1)  
+
+res_tax
+```
+
+```{r pred_analysis8, message = FALSE, warning = FALSE}
+pf(res_tax$fstatistic[1],res_tax$fstatistic[2],res_tax$fstatistic[3],lower.tail = FALSE)
+```
+All the levels are significant - so maintaining them.  
+
+```{r pred_analysis9, message = FALSE, warning = FALSE}
+# 5. Single Factor Regression - Sale Month
+model1 <- lm(nyc_pred.train$`SALE PRICE` ~ nyc_pred.train$`SALE MONTH`)
+res_month <- summary(model1) 
+
+res_month
+```
+  
+```{r pred_analysis10, message = FALSE, warning = FALSE} 
+  pf(res_month$fstatistic[1],res_month$fstatistic[2],res_month$fstatistic[3],lower.tail = FALSE)
+```
+
+None of the levels of the month variable are significant.  
+
+## **Multi Factor Linear Regression**  
+Running full model based on the variables reduced from the above step.  
+
+
+```{r pred_analysis11, message = FALSE, warning = FALSE} 
+model <- lm(`SALE PRICE` ~ .  -`SALE MONTH`, data = nyc_pred.train)
+```
+
+Though the Adjusted R-squared value is quite high and the Model MSE is very large. This is likely due to the large degrees of freedom in the model. **Linear Regression is not the right predictor for this data**  
+
+**NEXT STEPS:**  
+
+Variable Reduction to be employed for the Zip Code variable.  
+Variable selection methods to choose the optimal number of parameters.  
+Employ cross-validation methods to test the out-of-sample error.  
+Try other algorithms such as Random Forest.  
+
+\newpage  
+
+# **Conclusion**  
+Much of the work with the NYC Property Sales data was data cleaning. After the initial process of data cleaning (predominantly treating missing values), we identified many outliers within the Sales Price and Square footage numerical variables. Isolating these data points and exploring the points individually was valuable with this data set. **Linear regression does not factor the multiple levels of dependencies between the variables to effectively predict the property prices**
+
+**Insights:**  
+
+With this exploratory data analysis of the NYC Property Sale Prices, we found many interesting trends.
+  
+  
+Property prices in NYC range from $220,000 (10% percentile of Property prices) all the way to $2.2 billion (95% percentile of Property prices). NYC has a place for everyone!  
+
+  
+Price per square footage in Manhattan is as high as $16,000/sqft, while in Bloomfield, Staten Island is $26/sqft. Move to Staten Island, everyone!  
+  
+  
+Manhattan and Bronx sold the most residential condo apartments in large buildings/ residential societies, while Queens sold the most residential homes.  
+
+# **Future Plans**
+
+Finally we can conclude that there needs to be further analysis with the data. All the variables in the data set need to be tuned to perfectly complement the Property Sales business.   
+
+We need to use K Nearest Neighbors(KNN) to group the records as per the available features and may be try Random Forest to effective factor in all the various avenues of this data and predict the property prices.  
+
+Another suggestion would be convert this into a categorical problem rather than regression, by converting the property prices into ranges based on neighborhoods, boroughs and age of buildings and then predict the range to at least narrow it down to a ball park estimate of the real price.  

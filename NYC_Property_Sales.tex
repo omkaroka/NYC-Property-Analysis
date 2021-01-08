@@ -1,0 +1,1152 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  a3paper,
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+  \setmainfont[]{Arial}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={NYC Property Sales},
+  pdfauthor={Omkar Oka},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+
+\title{\textbf{NYC Property Sales}}
+\author{\textbf{Omkar Oka}}
+\date{\textbf{01/09/2021}}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\newpage
+
+\hypertarget{executive-summary}{%
+\section{\texorpdfstring{\textbf{Executive
+Summary:}}{Executive Summary:}}\label{executive-summary}}
+
+New York City is repeatedly named as among the most expensive cities in
+the world to buy real estate. CNBC 15's recent article on the most
+expensive places in the US to buy a home included three neighborhoods
+from NYC. With the NYC Property Sales Dataset, the New York City
+Department of Finance opened up its real estate market for analysis.
+
+The Dataset contains information of all the property sales in NYC from
+September 1, 2016 to August 31, 2017. With such a recent data set, I was
+able to analyze trends about NYC real estate market borough and
+neighborhood-wise.
+
+Analysis Methodology:
+
+My analysis of the NYC Real estate market is broken down into the
+following sections.
+
+Exploratory Data Analysis - Variables such as Borough, Neighborhood, Age
+of the building/property, Size of property and type of building are the
+important ones that I explored majorly. The descriptive statistics
+section speaks about the distribution of each variable and makes
+necessary changes for the analysis. I've also tried to isolate any
+potential outliers for the variable that will need special attention.
+
+Visualization of results - The visualization section is split into a few
+broad categories for need of clarity. The tabs within the viz section
+explore one variable at a time with respect to the important numerical
+fields.
+
+Most In-Demand Borough - Where did New Yorkers buy their properties last
+year?\\
+Most In-Demand Neighborhood - Which neighborhood do New Yorkers
+prefer?\\
+The Hottest Buildings - What kind of properties do they buy?\\
+Property sizes in NYC/ Square footage - Does more money mean larger
+properties in NYC?\\
+Age of the buildings in NYC - Does more money mean newer properties in
+NYC?\\
+Visualizing each of these plots showed me that many of these variables
+will be an important predictor of Sales Price, forming the basis for a
+potential predictive modeling.
+
+We will attempt to predict the prices using Linear Regression and
+document the results with future plans and recommendations.
+
+\hypertarget{data-preparation}{%
+\section{\texorpdfstring{\textbf{Data
+Preparation:}}{Data Preparation:}}\label{data-preparation}}
+
+The NYC Property Sales Dataset is a record of every building or
+apartment unit that was sold in the NYC Property market over a 12 month
+period.
+
+The dataset was downloaded from Kaggle. As this data set is a relatively
+cleaned- up version of the original NYC Department of Finance's dataset
+it has been included as an attachment with the file submitted as part of
+this project.
+
+Loading all the required libraries and the data frame from the CSV file.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{require}\NormalTok{(tidyverse)) }
+  \KeywordTok{install.packages}\NormalTok{(}\StringTok{"tidyverse"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"http://cran.us.r-project.org"}\NormalTok{)}
+\ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{require}\NormalTok{(caret)) }
+  \KeywordTok{install.packages}\NormalTok{(}\StringTok{"caret"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"http://cran.us.r-project.org"}\NormalTok{)}
+\ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{require}\NormalTok{(data.table)) }
+  \KeywordTok{install.packages}\NormalTok{(}\StringTok{"data.table"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"http://cran.us.r-project.org"}\NormalTok{)}
+\ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{require}\NormalTok{(anytime)) }
+  \KeywordTok{install.packages}\NormalTok{(}\StringTok{"anytime"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"http://cran.us.r-project.org"}\NormalTok{)}
+\ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{require}\NormalTok{(lubridate)) }
+  \KeywordTok{install.packages}\NormalTok{(}\StringTok{"lubridate"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"http://cran.us.r-project.org"}\NormalTok{)}
+\ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{require}\NormalTok{(corrr)) }
+  \KeywordTok{install.packages}\NormalTok{(}\StringTok{"corrr"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"http://cran.us.r-project.org"}\NormalTok{)}
+\ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{require}\NormalTok{(knitr)) }
+  \KeywordTok{install.packages}\NormalTok{(}\StringTok{"knitr"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"http://cran.us.r-project.org"}\NormalTok{)}
+\ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{require}\NormalTok{(corrplot)) }
+  \KeywordTok{install.packages}\NormalTok{(}\StringTok{"corrplot"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"http://cran.us.r-project.org"}\NormalTok{)}
+\ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\KeywordTok{require}\NormalTok{(randomForest)) }
+  \KeywordTok{install.packages}\NormalTok{(}\StringTok{"randomForest"}\NormalTok{, }\DataTypeTok{repos =} \StringTok{"http://cran.us.r-project.org"}\NormalTok{)}
+
+\CommentTok{#Loading Libraries:}
+\KeywordTok{library}\NormalTok{(}\StringTok{"stringr"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"tidyverse"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"caret"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"anytime"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"lubridate"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"corrr"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"knitr"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"corrplot"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"randomForest"}\NormalTok{)}
+\KeywordTok{options}\NormalTok{(}\StringTok{"scipen"}\NormalTok{ =}\StringTok{ }\DecValTok{10}\NormalTok{)}
+
+\NormalTok{nyc <-}\StringTok{ }
+\StringTok{  }\KeywordTok{as_data_frame}\NormalTok{(}\KeywordTok{fread}\NormalTok{(}\StringTok{"C:/Users/omkar.oka/Desktop/DataScience/NYC House/nyc-rolling-sales.csv"}\NormalTok{)) }
+\CommentTok{##Replace the path with your local computer path while executing the code.}
+\end{Highlighting}
+\end{Shaded}
+
+\newpage
+
+The NYC Property Sales Data has 84548 observations and 22 variables. It
+has property sales data of each of the 5 boroughs in NYC - Manhattan,
+the Bronx, Queens, Brookyln and Staten Island.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(nyc)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## tibble [84,548 x 22] (S3: tbl_df/tbl/data.frame)
+##  $ V1                            : int [1:84548] 4 5 6 7 8 9 10 11 12 13 ...
+##  $ BOROUGH                       : int [1:84548] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ NEIGHBORHOOD                  : chr [1:84548] "ALPHABET CITY" "ALPHABET CITY" "ALPHABET CITY" "ALPHABET CITY" ...
+##  $ BUILDING CLASS CATEGORY       : chr [1:84548] "07 RENTALS - WALKUP APARTMENTS" "07 RENTALS - WALKUP APARTMENTS" "07 RENTALS - WALKUP APARTMENTS" "07 RENTALS - WALKUP APARTMENTS" ...
+##  $ TAX CLASS AT PRESENT          : chr [1:84548] "2A" "2" "2" "2B" ...
+##  $ BLOCK                         : int [1:84548] 392 399 399 402 404 405 406 407 379 387 ...
+##  $ LOT                           : int [1:84548] 6 26 39 21 55 16 32 18 34 153 ...
+##  $ EASE-MENT                     : logi [1:84548] NA NA NA NA NA NA ...
+##  $ BUILDING CLASS AT PRESENT     : chr [1:84548] "C2" "C7" "C7" "C4" ...
+##  $ ADDRESS                       : chr [1:84548] "153 AVENUE B" "234 EAST 4TH   STREET" "197 EAST 3RD   STREET" "154 EAST 7TH STREET" ...
+##  $ APARTMENT NUMBER              : chr [1:84548] "" "" "" "" ...
+##  $ ZIP CODE                      : int [1:84548] 10009 10009 10009 10009 10009 10009 10009 10009 10009 10009 ...
+##  $ RESIDENTIAL UNITS             : int [1:84548] 5 28 16 10 6 20 8 44 15 24 ...
+##  $ COMMERCIAL UNITS              : int [1:84548] 0 3 1 0 0 0 0 2 0 0 ...
+##  $ TOTAL UNITS                   : int [1:84548] 5 31 17 10 6 20 8 46 15 24 ...
+##  $ LAND SQUARE FEET              : chr [1:84548] "1633" "4616" "2212" "2272" ...
+##  $ GROSS SQUARE FEET             : chr [1:84548] "6440" "18690" "7803" "6794" ...
+##  $ YEAR BUILT                    : int [1:84548] 1900 1900 1900 1913 1900 1900 1920 1900 1920 1920 ...
+##  $ TAX CLASS AT TIME OF SALE     : int [1:84548] 2 2 2 2 2 2 2 2 2 2 ...
+##  $ BUILDING CLASS AT TIME OF SALE: chr [1:84548] "C2" "C7" "C7" "C4" ...
+##  $ SALE PRICE                    : chr [1:84548] "6625000" "-" "-" "3936272" ...
+##  $ SALE DATE                     : chr [1:84548] "2017-07-19 00:00:00" "2016-12-14 00:00:00" "2016-12-09 00:00:00" "2016-09-23 00:00:00" ...
+##  - attr(*, ".internal.selfref")=<externalptr>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nyc <-}\StringTok{ }\NormalTok{nyc }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{V1) }\CommentTok{##Removing Row ID column V1}
+\NormalTok{dup <-}\StringTok{ }\NormalTok{nyc }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(}\KeywordTok{duplicated}\NormalTok{(nyc) }\OperatorTok{==}\StringTok{ }\OtherTok{TRUE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{nrow}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+Total number of duplicate rows: 765\\
+\newpage
+
+\hypertarget{data-cleanup}{%
+\subsection{\texorpdfstring{\textbf{Data
+Cleanup}}{Data Cleanup}}\label{data-cleanup}}
+
+Based on the number of duplicates its safe to assume that they are just
+duplicate entries and hold no significance. Hence we can drop these
+rows.\\
+Also we will split the \texttt{SALE\ DATE} into date and time components
+and just drop the time component, since time does not affect the price
+of the property. On further analysis we can see that the
+\texttt{EASE-MENT} column has no data and can be dropped.
+
+\hypertarget{cleaned-up-data}{%
+\subsubsection{\texorpdfstring{\textbf{Cleaned up
+Data}}{Cleaned up Data}}\label{cleaned-up-data}}
+
+\begin{verbatim}
+## tibble [83,783 x 21] (S3: tbl_df/tbl/data.frame)
+##  $ BOROUGH                       : int [1:83783] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ NEIGHBORHOOD                  : chr [1:83783] "ALPHABET CITY" "ALPHABET CITY" "ALPHABET CITY" "ALPHABET CITY" ...
+##  $ BUILDING CLASS CATEGORY NUMBER: chr [1:83783] "07 " "07 " "07 " "07 " ...
+##  $ BUILDING CLASS CATEGORY       : chr [1:83783] "RENTALS - WALKUP APARTMENTS" "RENTALS - WALKUP APARTMENTS" "RENTALS - WALKUP APARTMENTS" "RENTALS - WALKUP APARTMENTS" ...
+##  $ TAX CLASS AT PRESENT          : chr [1:83783] "2A" "2" "2" "2B" ...
+##  $ BLOCK                         : int [1:83783] 392 399 399 402 404 405 406 407 379 387 ...
+##  $ LOT                           : int [1:83783] 6 26 39 21 55 16 32 18 34 153 ...
+##  $ BUILDING CLASS AT PRESENT     : chr [1:83783] "C2" "C7" "C7" "C4" ...
+##  $ ADDRESS                       : chr [1:83783] "153 AVENUE B" "234 EAST 4TH   STREET" "197 EAST 3RD   STREET" "154 EAST 7TH STREET" ...
+##  $ APARTMENT NUMBER              : chr [1:83783] "" "" "" "" ...
+##  $ ZIP CODE                      : int [1:83783] 10009 10009 10009 10009 10009 10009 10009 10009 10009 10009 ...
+##  $ RESIDENTIAL UNITS             : int [1:83783] 5 28 16 10 6 20 8 44 15 24 ...
+##  $ COMMERCIAL UNITS              : int [1:83783] 0 3 1 0 0 0 0 2 0 0 ...
+##  $ TOTAL UNITS                   : int [1:83783] 5 31 17 10 6 20 8 46 15 24 ...
+##  $ LAND SQUARE FEET              : chr [1:83783] "1633" "4616" "2212" "2272" ...
+##  $ GROSS SQUARE FEET             : chr [1:83783] "6440" "18690" "7803" "6794" ...
+##  $ YEAR BUILT                    : int [1:83783] 1900 1900 1900 1913 1900 1900 1920 1900 1920 1920 ...
+##  $ TAX CLASS AT TIME OF SALE     : int [1:83783] 2 2 2 2 2 2 2 2 2 2 ...
+##  $ BUILDING CLASS AT TIME OF SALE: chr [1:83783] "C2" "C7" "C7" "C4" ...
+##  $ SALE PRICE                    : chr [1:83783] "6625000" "-" "-" "3936272" ...
+##  $ SALE DATE                     : chr [1:83783] "2017-07-19" "2016-12-14" "2016-12-09" "2016-09-23" ...
+\end{verbatim}
+
+After removing the unnecessary columns, we will create a new column
+called \texttt{Building\ Age} transforming the variable,
+\texttt{Year\ Built} and \texttt{SALE\ DATE}. Building age is a much
+clearer metric to understand.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nyc <-}\StringTok{ }\NormalTok{nyc }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\StringTok{`}\DataTypeTok{BUILDING AGE}\StringTok{`}\NormalTok{ =}\StringTok{ }\KeywordTok{as.integer}\NormalTok{(}\KeywordTok{format}\NormalTok{(}\KeywordTok{as.Date}\NormalTok{(}\StringTok{`}\DataTypeTok{SALE DATE}\StringTok{`}\NormalTok{, }\DataTypeTok{format=}\StringTok{"%Y-%m-%d"}\NormalTok{),}\StringTok{"%Y"}\NormalTok{)) }\OperatorTok{-}\StringTok{ `}\DataTypeTok{YEAR BUILT}\StringTok{`}\NormalTok{)}
+\CommentTok{# Creating a new column called 'Building Age' transforming the variable, 'Year Built'}
+\end{Highlighting}
+\end{Shaded}
+
+\newpage
+
+\hypertarget{data-conversion}{%
+\subsection{\texorpdfstring{\textbf{Data
+Conversion}}{Data Conversion}}\label{data-conversion}}
+
+We will be converting the character and discrete numeric columns to
+factors. Converting the character columns that have numbers to numeric
+and some columns to character for further analysis.
+
+\begin{verbatim}
+## tibble [83,783 x 22] (S3: tbl_df/tbl/data.frame)
+##  $ BOROUGH                       : Factor w/ 5 levels "Manhattan","Bronx",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ NEIGHBORHOOD                  : chr [1:83783] "ALPHABET CITY" "ALPHABET CITY" "ALPHABET CITY" "ALPHABET CITY" ...
+##  $ BUILDING CLASS CATEGORY NUMBER: Factor w/ 47 levels "01 ","02 ","03 ",..: 7 7 7 7 7 7 7 7 8 8 ...
+##  $ BUILDING CLASS CATEGORY       : Factor w/ 47 levels " CONDO-RENTALS",..: 34 34 34 34 34 34 34 34 33 33 ...
+##  $ TAX CLASS AT PRESENT          : Factor w/ 11 levels "","1","1A","1B",..: 7 6 6 8 7 6 8 6 6 6 ...
+##  $ BLOCK                         : chr [1:83783] "392" "399" "399" "402" ...
+##  $ LOT                           : chr [1:83783] "6" "26" "39" "21" ...
+##  $ BUILDING CLASS AT PRESENT     : Factor w/ 167 levels "","A0","A1","A2",..: 17 22 22 19 17 19 19 22 31 35 ...
+##  $ ADDRESS                       : chr [1:83783] "153 AVENUE B" "234 EAST 4TH   STREET" "197 EAST 3RD   STREET" "154 EAST 7TH STREET" ...
+##  $ APARTMENT NUMBER              : chr [1:83783] "" "" "" "" ...
+##  $ ZIP CODE                      : Factor w/ 186 levels "0","10001","10002",..: 9 9 9 9 9 9 9 9 9 9 ...
+##  $ RESIDENTIAL UNITS             : int [1:83783] 5 28 16 10 6 20 8 44 15 24 ...
+##  $ COMMERCIAL UNITS              : int [1:83783] 0 3 1 0 0 0 0 2 0 0 ...
+##  $ TOTAL UNITS                   : int [1:83783] 5 31 17 10 6 20 8 46 15 24 ...
+##  $ LAND SQUARE FEET              : num [1:83783] 1633 4616 2212 2272 2369 ...
+##  $ GROSS SQUARE FEET             : num [1:83783] 6440 18690 7803 6794 4615 ...
+##  $ YEAR BUILT                    : num [1:83783] 1900 1900 1900 1913 1900 ...
+##  $ TAX CLASS AT TIME OF SALE     : Factor w/ 4 levels "1","2","3","4": 2 2 2 2 2 2 2 2 2 2 ...
+##  $ BUILDING CLASS AT TIME OF SALE: Factor w/ 166 levels "A0","A1","A2",..: 16 21 21 18 16 18 18 21 30 34 ...
+##  $ SALE PRICE                    : num [1:83783] 6625000 NA NA 3936272 8000000 ...
+##  $ SALE DATE                     : Date[1:83783], format: "2017-07-19" "2016-12-14" ...
+##  $ BUILDING AGE                  : int [1:83783] 117 116 116 103 116 117 96 117 97 96 ...
+\end{verbatim}
+
+\hypertarget{data-description}{%
+\subsection{\texorpdfstring{\textbf{Data
+Description}}{Data Description}}\label{data-description}}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+Variable Name & Data Type & Variable Description\tabularnewline
+\midrule
+\endhead
+BOROUGH & factor & Name of the borough where the property is
+located\tabularnewline
+NEIGHBORHOOD & character & Neighbourhood name\tabularnewline
+BUILDING CLASS CATEGORY NUMBER & factor & Building class category code
+to identify similar properties\tabularnewline
+BUILDING CLASS CATEGORY & factor & Building class category title to
+identify similar properties\tabularnewline
+TAX CLASS AT PRESENT & factor & Assigned tax class of the property -
+Classes 1, 2, 3 or 4\tabularnewline
+BLOCK & character & Sub-division of the borough for property
+location\tabularnewline
+LOT & character & Sub-division of a Tax Block for every property
+location\tabularnewline
+BUILDING CLASS AT PRESENT & factor & Used to describe a property's
+constructive use\tabularnewline
+ADDRESS & character & Property's street address\tabularnewline
+APARTMENT NUMBER & character & Property's apartment
+number\tabularnewline
+ZIP CODE & factor & Property's postal code\tabularnewline
+RESIDENTIAL UNITS & integer & Number of residential units at the listed
+property\tabularnewline
+COMMERCIAL UNITS & integer & Number of commercial units at the listed
+property\tabularnewline
+TOTAL UNITS & integer & Total number of units at the listed
+property\tabularnewline
+LAND SQUARE FEET & numeric & Land area of the property listed in square
+feet\tabularnewline
+GROSS SQUARE FEET & numeric & Total area of all the floors of a
+building\tabularnewline
+YEAR BUILT & numeric & Property's construction year\tabularnewline
+TAX CLASS AT TIME OF SALE & factor & Assigned tax class of the property
+at sale\tabularnewline
+BUILDING CLASS AT TIME OF SALE & factor & Used to describe a property's
+constructive use at sale\tabularnewline
+SALE PRICE & numeric & Price paid for the property\tabularnewline
+SALE DATE & Date & Date of property sale\tabularnewline
+BUILDING AGE & integer & Age of the Building\tabularnewline
+\newpage & &\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{data-analysis}{%
+\section{\texorpdfstring{\textbf{Data
+Analysis}}{Data Analysis}}\label{data-analysis}}
+
+\textbf{1. Sale Price}
+
+\begin{verbatim}
+##         0%        10%        20%        30%        40% 
+##          1     199000     319410     420810     515000 
+##        50%        60%        70%        80%        90% 
+##     628000     753403     935000    1290000    2250000 
+##       100% 
+## 2210000000
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 1125
+\end{verbatim}
+
+Dropping records with sale price less than \$1000 since these are clear
+anomalies / outliers based on the distribution we see above.
+
+After dropping the records we can see that the distribution has shifted
+and does not have an extreme low point anymore.
+
+\begin{verbatim}
+##         0%        10%        20%        30%        40% 
+##       1110     220000     333240     435000     529000 
+##        50%        60%        70%        80%        90% 
+##     640000     765000     950000    1300000    2300000 
+##       100% 
+## 2210000000
+\end{verbatim}
+
+\textbf{2. Land Square Feet}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##       0    1400    2200    3622    3300 4252327   21000
+\end{verbatim}
+
+This is the overall distribution:
+
+\begin{verbatim}
+##        0%       10%       20%       30%       40%       50% 
+##       0.0       0.0       0.0    1709.7    2000.0    2200.0 
+##       60%       70%       80%       90%      100% 
+##    2500.0    2955.0    4000.0    5000.0 4252327.0
+\end{verbatim}
+
+We can clearly deduce that 4252327.0 is an outlier in this dataset for
+Land Square Feet. Assuming a ball-park value that buildings that have
+\textgreater{} 500,000 land sq footage must be Commercial Vacant lands,
+Store Buildings and other large properties.
+
+\textbf{3. Gross Square Feet}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##       0     864    1548    3380    2340 3750565   21532
+\end{verbatim}
+
+This is the overall distribution:
+
+\begin{verbatim}
+##        0%       10%       20%       30%       40%       50% 
+##       0.0       0.0       0.0    1092.0    1312.0    1548.0 
+##       60%       70%       80%       90%      100% 
+##    1816.0    2150.0    2600.0    3486.3 3750565.0
+\end{verbatim}
+
+Similar to land square foot there are outliers for gross square feet as
+well which are vacant lands or large properties like warehouses.
+
+\textbf{4. Residential Units, Commercial Units and Total Units}
+
+\textbf{Residential Units:} Summary:
+
+\begin{verbatim}
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+##    0.000    0.000    1.000    1.702    1.000 1844.000
+\end{verbatim}
+
+Distribution:
+
+\begin{verbatim}
+## [1] 1376
+\end{verbatim}
+
+\textbf{Commercial Units:}\\
+Summary:
+
+\begin{verbatim}
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+##    0.0000    0.0000    0.0000    0.1546    0.0000 2261.0000
+\end{verbatim}
+
+In the entire data set, there are only 1376 buildings in which more than
+5 Residential units were sold in 2016. In the entire data set, there are
+only 140 buildings in which more than 5 Commercial units were sold in
+2016.
+
+As explored earlier, we know that only for 794 properties, Total Units
+is not equal to Residential, Commercial Units. As Total Units has the
+least NAs, we will be using this field for further analysis.
+
+\textbf{5. Building Age}
+
+There are 4195 properties with Building age. When we remove properties
+that don't have a Year Built entry or Year Built = 0, we get 28 property
+details.
+
+Summary for Building Age:
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     0.0    51.0    76.0   204.9    96.0  2017.0
+\end{verbatim}
+
+Summary for Year Built:
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##       0    1920    1940    1812    1966    2017
+\end{verbatim}
+
+Number of Buildings more than 200 years old:
+
+\begin{verbatim}
+## [1] 28
+\end{verbatim}
+
+\newpage
+
+\hypertarget{data-visualization}{%
+\section{\texorpdfstring{\textbf{Data
+Visualization}}{Data Visualization}}\label{data-visualization}}
+
+\textbf{1. NYC Boroughs:}\\
+\includegraphics{NYC_Property_Sales_files/figure-latex/borough1-1.pdf}
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/borough2-1.pdf}
+The plots above show that Queens has the most number of property sales,
+followed by Brookyln. The Average Sale Price of a property in Queens was
+\$27 billion, while in Manhattan was \$22 billion. This is surprising as
+properties in Manhattan are expected to cost more. Let's explore this
+further with the other fields.
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/borough3-1.pdf}
+
+The Flushing North region of the Queens borough has the most number of
+units sold which might be a new neighborhood promoted by the government
+civilization program.\\
+\newpage
+
+\textbf{2. Neighborhoods:}
+
+With the exploration of the property sales and prices across Boroughs in
+NYC, lets see how the numbers divide up with respect to each
+Neighborhood. We can start answering this by looking at the Number of
+Sales and Average property Sales Prices across the most in-demand
+neighborhoods.
+
+Most-in demand and Expensive Neighborhood in NYC
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/neighbrhd1-1.pdf}
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/neighbrhd2-1.pdf}
+
+Consistent with the previous plots, the Top Neighborhoods by number of
+Property Sales in 2016 plot shows that neighborhoods in Queens and
+Manhattan had the most number of properties sold - this accounted to 7
+out of the 10 top neighborhoods.
+
+With respect to the Average value of properties sold in different
+neighborhoods, Bloomfield in Staten Island was the top. Staten Island,
+however, was among the lowest when we arranged the Average Sale Price
+according to Borough. So these properties must have been the top 20\% of
+the Sale Price that we explored earlier. Also interesting to note is
+that 7 out the 10 top property value neighborhoods are from Manhattan.
+Clearly, even though no neighborhood in Queens fetched top bucks last
+year, it sold much more properties than the other boroughs.
+
+Also note that the average price of the Most expensive Neighborhood and
+the second most expensive by \$12.5 billion. Needless to say, the
+standard deviation of the property prices in NYC is large!
+
+Lets check this by plotting the least expensive neighborhoods.
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/neighbrhd3-1.pdf}
+
+As expected, Staten Island, Queens and Bronx - the Boroughs that didn't
+feature in the Top Borough list made it here. Interesting to note is the
+differences in the Average Sale Price scale of the Most and the Least
+expensive properties in NYC. The average property price in Van Cortlandt
+Park in the Bronx sold for \$160,000, while the most expensive property
+in Staten Island, Bloomsfield sold for 46 billion dollars.\\
+\newpage
+
+\textbf{3. Buildings:}
+
+With the knowledge of the demand and prices in neighborhoods across
+Boroughs, lets understand what kind of buildings get sold across NYC.
+This will clearly show what the hottest buildings around NYC are and
+their sale prices.
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/building1-1.pdf}
+Clearly, the most in-demand buildings in NYC over the years were one
+family dwellings, across Staten Island, Queens and Brooklyn. Coops in
+Elevator Apartments were also much wanted over the last year.
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/building2-1.pdf}
+
+Most of the top properties in Manhattan were commercial - Office
+buildings, Luxury Hotels, and other commercial classes, while the
+apartments and condos, though expensive, were on the cheaper side for
+Manhattan.
+
+Another clear pattern is that the most expensive buildings are almost
+entirely commercial buildings. Also note how the theaters in Queens are
+as expensive as Rental apartments in Manhattan.
+
+To make the property price variance argument more solid, let's explore
+how the least expensive buildings in NYC look.
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/building3-1.pdf}
+
+The least expensive property in NYC is a Condo Parking space in Staten
+island. Interestingly, the most expensive and the least expensive
+buildings in NYC are commercial buildings. For \$45,000 you could also
+buy a Condo Terrace in the Queens!
+
+\textbf{Tax Class of the Properties sold:}
+
+Adding another variable to the equation now, let's look at the Tax Class
+of the Properties sold in NYC. There are 4 tax classes that Property
+sales are categorized into. Over the last year, there were no Tax Class,
+3, property sales.
+
+Class 1: Includes most residential property of up to three units
+
+Class 2: Includes all other property that is primarily residential, such
+as cooperatives and condominiums.
+
+Class 3: Includes property with equipment owned by a gas, telephone or
+electric company
+
+Class 4: Includes all other properties not included in class 1,2, and 3,
+such as offices, factories, warehouses, garage buildings, etc.
+
+Here is a distribution of units sold across all tax classes categorized
+by boroughs:
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/building4-1.pdf}
+
+\newpage
+
+\textbf{4. Property Size:} We can already guess that the tentative
+Price/unit area varies with Neighborhood as well. To explore this
+metric, lets plot Sale Price vs Land square Feet, Sale Price vs Gross
+square Feet borough-wise.
+
+Sale Price vs Land Square Feet:
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/propsize1-1.pdf}
+They clearly have different patterns \newpage
+
+Sale Price vs Gross Square Feet:
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/propsize2-1.pdf}
+
+The trends seem to largely be similar for Gross Square Footage and Land
+Square Footage except for the different trend in Manhattan.
+
+To complement the charts above, we can plot a metric `Price/unit area'
+for all the Boroughs. This will be the clearest indicator of the price
+of a unit sq foot of space in NYC \newpage
+
+Price/sq. Feet in NYC:
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/propsize3-1.pdf}
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/propsize4-1.pdf}
+
+Consistent with the analysis above, we can see all top 15 Price/sqft
+from Manhattan and a mojority of the Lowest Price/sqft from Staten
+Island. While the most expensive property in NYC sold at 16,000
+dollars/sqft in Midtown CBD, the least expensive property was priced at
+26 dollars/sqft.\\
+\newpage
+
+\textbf{5. Building Age:}
+
+Another important variable in the dataset is Building age. Exploring
+this variable will help us understand how Property prices fluctuate
+across Boroughs with the age of the building.
+
+We will plot the Distribution of Building age across each borough to
+figure where the older buildings in NYC are and then also plot the Sale
+Price vs Building age across each borough to identify if building age
+impacts the property sale price.
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/buildingage1-1.pdf}
+
+The plot shows that only in Manhattan and the Bronx can we expect
+property prices to fall as the age of the Building increases. Building
+age might not even be a good predictor of Sale price for properties in
+the other Boroughs.
+
+\newpage
+
+\hypertarget{data-preparation-and-correlation}{%
+\section{\texorpdfstring{\textbf{Data Preparation and
+Correlation}}{Data Preparation and Correlation}}\label{data-preparation-and-correlation}}
+
+\hypertarget{data-preparation-1}{%
+\subsection{\texorpdfstring{\textbf{Data
+Preparation}}{Data Preparation}}\label{data-preparation-1}}
+
+To predict the NYC Property Price using this data set, we need to create
+a new data set for prediction removing all character values - such as
+Address, etc and retain only the fields that could help in prediction.
+
+We will also transform Sale date into the month in which the sale
+occurred for better aesthetics.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nyc}\OperatorTok{$}\StringTok{`}\DataTypeTok{SALE MONTH}\StringTok{`}\NormalTok{ <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(}\KeywordTok{months}\NormalTok{(nyc}\OperatorTok{$}\StringTok{`}\DataTypeTok{SALE DATE}\StringTok{`}\NormalTok{))}
+\NormalTok{nyc}\OperatorTok{$}\NormalTok{NEIGHBORHOOD <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(nyc}\OperatorTok{$}\NormalTok{NEIGHBORHOOD)}
+
+\NormalTok{nyc_final <-}\StringTok{ }\NormalTok{nyc[, }\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{17}\NormalTok{, }\DecValTok{19}\NormalTok{, }\DecValTok{21}\NormalTok{)]}
+\NormalTok{nyc_final <-}\StringTok{ }\NormalTok{nyc_final[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, }\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{11}\NormalTok{)]}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{correlations}{%
+\subsection{\texorpdfstring{\textbf{Correlations}}{Correlations}}\label{correlations}}
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/corr2-1.pdf}
+Clearly, Residential units - Total units - Gross Square Feet are highly
+correlated (\textgreater{} 0.7); Commercial units and Total units are
+also fairly correlated (0.577) Total units has high correlation with
+almost all variables.
+
+Land Square Feet and Gross Square Feet are highly correlated as well
+(0.664). Consider using Total units, instead of Residential units and
+Commercial units and Land Square Feet instead of Land Square Feet and
+Gross Square Feet.
+
+\includegraphics{NYC_Property_Sales_files/figure-latex/corr4-1.pdf}
+Checking the correlation between the categorical variables shows some
+clear trends. Borough and Zip Code have high correlation (0.65) and
+Borough Class Category, Tax class has high correlation too (0.613).
+
+\newpage
+
+\hypertarget{predictive-analysis}{%
+\section{\texorpdfstring{\textbf{Predictive
+Analysis}}{Predictive Analysis}}\label{predictive-analysis}}
+
+\hypertarget{final-data-preparation}{%
+\subsection{\texorpdfstring{\textbf{Final Data
+Preparation}}{Final Data Preparation}}\label{final-data-preparation}}
+
+To predict the NYC Property Price using this data set, we have to start
+with creating a new data set for prediction removing all character
+values - such as Address, etc and retain only the fields that could help
+in prediction. We will also transform Sale date into the month in which
+the sale occurred to create another prediction dimension.
+
+\begin{verbatim}
+## tibble [58,470 x 13] (S3: tbl_df/tbl/data.frame)
+##  $ BOROUGH                  : Factor w/ 5 levels "Manhattan","Bronx",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ NEIGHBORHOOD             : Factor w/ 253 levels "AIRPORT LA GUARDIA",..: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ BUILDING CLASS CATEGORY  : Factor w/ 47 levels " CONDO-RENTALS",..: 34 34 34 34 33 33 20 20 20 20 ...
+##  $ ZIP CODE                 : Factor w/ 186 levels "0","10001","10002",..: 9 9 9 9 9 9 9 9 9 9 ...
+##  $ RESIDENTIAL UNITS        : int [1:58470] 5 10 6 8 24 10 0 0 0 0 ...
+##  $ COMMERCIAL UNITS         : int [1:58470] 0 0 0 0 0 0 0 0 0 0 ...
+##  $ TOTAL UNITS              : int [1:58470] 5 10 6 8 24 10 0 0 0 0 ...
+##  $ LAND SQUARE FEET         : num [1:58470] 1633 2272 2369 1750 4489 ...
+##  $ GROSS SQUARE FEET        : num [1:58470] 6440 6794 4615 4226 18523 ...
+##  $ TAX CLASS AT TIME OF SALE: Factor w/ 4 levels "1","2","3","4": 2 2 2 2 2 2 2 2 2 2 ...
+##  $ BUILDING AGE             : int [1:58470] 117 103 116 96 96 7 97 97 97 92 ...
+##  $ SALE MONTH               : Factor w/ 12 levels "April","August",..: 6 12 10 12 10 11 8 7 6 8 ...
+##  $ SALE PRICE               : num [1:58470] 6625000 3936272 8000000 3192840 16232000 ...
+\end{verbatim}
+
+To begin with the modeling exercise, we will split the data set into an
+80-20\% training and test set.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{index <-}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(nyc_pred),}\KeywordTok{nrow}\NormalTok{(nyc_pred)}\OperatorTok{*}\FloatTok{0.80}\NormalTok{)}
+\NormalTok{nyc_pred.train <-}\StringTok{ }\NormalTok{nyc_pred[index,]}
+\NormalTok{nyc_pred.test <-}\StringTok{ }\NormalTok{nyc_pred[}\OperatorTok{-}\NormalTok{index,]}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{single-factor-linear-regression}{%
+\subsection{\texorpdfstring{\textbf{Single Factor Linear
+Regression}}{Single Factor Linear Regression}}\label{single-factor-linear-regression}}
+
+Running a full model Linear regression for this data set does not seem
+too appropriate as there are too many categorical predictors that will
+create lots of dummy variables. To check if they're necessary we will
+use a single factor regression between the predictor and each response
+variable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 1. Single Factor Regression - Borough}
+\NormalTok{model1 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(nyc_pred.train}\OperatorTok{$}\StringTok{`}\DataTypeTok{SALE PRICE}\StringTok{`} \OperatorTok{~}\StringTok{ }\NormalTok{nyc_pred.train}\OperatorTok{$}\NormalTok{BOROUGH)}
+\NormalTok{res_borough <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(model1)}
+
+\NormalTok{res_borough}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = nyc_pred.train$`SALE PRICE` ~ nyc_pred.train$BOROUGH)
+## 
+## Residuals:
+##        Min         1Q     Median         3Q        Max 
+##   -3267200    -797710    -389808     -28353 2206731625 
+## 
+## Coefficients:
+##                                     Estimate Std. Error
+## (Intercept)                          3268375     113964
+## nyc_pred.train$BOROUGHBronx         -2408421     224565
+## nyc_pred.train$BOROUGHBrooklyn      -2012312     158484
+## nyc_pred.train$BOROUGHQueens        -2512022     152560
+## nyc_pred.train$BOROUGHStaten Island -2706421     211927
+##                                     t value Pr(>|t|)    
+## (Intercept)                           28.68   <2e-16 ***
+## nyc_pred.train$BOROUGHBronx          -10.72   <2e-16 ***
+## nyc_pred.train$BOROUGHBrooklyn       -12.70   <2e-16 ***
+## nyc_pred.train$BOROUGHQueens         -16.47   <2e-16 ***
+## nyc_pred.train$BOROUGHStaten Island  -12.77   <2e-16 ***
+## ---
+## Signif. codes:  
+## 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 12190000 on 46771 degrees of freedom
+## Multiple R-squared:  0.007173,   Adjusted R-squared:  0.007088 
+## F-statistic: 84.48 on 4 and 46771 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pf}\NormalTok{(res_borough}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{1}\NormalTok{],res_borough}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{2}\NormalTok{],res_borough}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{3}\NormalTok{],}\DataTypeTok{lower.tail =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        value 
+## 1.294664e-71
+\end{verbatim}
+
+The F statistic for Borough is significant.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 2. Single Factor Regression - Neighborhood}
+
+\NormalTok{model1 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(nyc_pred.train}\OperatorTok{$}\StringTok{`}\DataTypeTok{SALE PRICE}\StringTok{`} \OperatorTok{~}\StringTok{ }\NormalTok{nyc_pred.train}\OperatorTok{$}\NormalTok{NEIGHBORHOOD)}
+\NormalTok{res_neigh <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(model1)}
+
+\CommentTok{# F-statistic p-value}
+\KeywordTok{pf}\NormalTok{(res_neigh}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{1}\NormalTok{],res_neigh}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{2}\NormalTok{],res_neigh}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{3}\NormalTok{],}\DataTypeTok{lower.tail =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         value 
+## 5.224904e-162
+\end{verbatim}
+
+\newpage
+
+Only 4 neighborhoods are significant. Manually creating dummies for
+these categories and clubbing the rest under a Neighborhood `Others'
+variable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nyc_pred.train}\OperatorTok{$}\NormalTok{N_BLOOMFIELD =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(nyc_pred.train}\OperatorTok{$}\NormalTok{NEIGHBORHOOD }\OperatorTok{==}\StringTok{ "BLOOMFIELD"}\NormalTok{, }\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\NormalTok{nyc_pred.train}\OperatorTok{$}\NormalTok{N_FASHION =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(nyc_pred.train}\OperatorTok{$}\NormalTok{NEIGHBORHOOD }\OperatorTok{==}\StringTok{ "FASHION"}\NormalTok{, }\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\NormalTok{nyc_pred.train}\OperatorTok{$}\StringTok{`}\DataTypeTok{N_JAVITS CENTER}\StringTok{`}\NormalTok{ =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(nyc_pred.train}\OperatorTok{$}\NormalTok{NEIGHBORHOOD }\OperatorTok{==}\StringTok{ "JAVITS CENTER"}\NormalTok{, }\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\NormalTok{nyc_pred.train}\OperatorTok{$}\StringTok{`}\DataTypeTok{N_MIDTOWN CBD}\StringTok{`}\NormalTok{ =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(nyc_pred.train}\OperatorTok{$}\NormalTok{NEIGHBORHOOD }\OperatorTok{==}\StringTok{ "MIDTOWN CBD"}\NormalTok{, }\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\NormalTok{nyc_pred.train}\OperatorTok{$}\StringTok{`}\DataTypeTok{N_OTHERS}\StringTok{`}\NormalTok{ =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{((nyc_pred.train}\OperatorTok{$}\NormalTok{NEIGHBORHOOD }\OperatorTok{!=}\StringTok{ "MIDTOWN CBD"}\NormalTok{) }\OperatorTok{&}
+\StringTok{                                                       }\NormalTok{(nyc_pred.train}\OperatorTok{$}\NormalTok{NEIGHBORHOOD }\OperatorTok{!=}\StringTok{ "JAVITS CENTER"}\NormalTok{) }\OperatorTok{&}
+\StringTok{                                                       }\NormalTok{(nyc_pred.train}\OperatorTok{$}\NormalTok{NEIGHBORHOOD }\OperatorTok{!=}\StringTok{ "FASHION"}\NormalTok{) }\OperatorTok{&}
+\StringTok{                                                       }\NormalTok{(nyc_pred.train}\OperatorTok{$}\NormalTok{NEIGHBORHOOD }\OperatorTok{!=}\StringTok{ "BLOOMFIELD"}\NormalTok{), }\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+
+\CommentTok{# Removing the original Neighborhood predictor}
+\NormalTok{nyc_pred.train <-}\StringTok{ }\NormalTok{nyc_pred.train[,}\OperatorTok{-}\DecValTok{2}\NormalTok{] }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 3. Single Factor Regression - BCC}
+\NormalTok{model1 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(nyc_pred.train}\OperatorTok{$}\StringTok{`}\DataTypeTok{SALE PRICE}\StringTok{`} \OperatorTok{~}\StringTok{ }\NormalTok{nyc_pred.train}\OperatorTok{$}\StringTok{`}\DataTypeTok{BUILDING CLASS CATEGORY}\StringTok{`}\NormalTok{)}
+\NormalTok{res_bcc <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(model1) }
+
+\CommentTok{# F-statistic p-value}
+\KeywordTok{pf}\NormalTok{(res_bcc}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{1}\NormalTok{],res_bcc}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{2}\NormalTok{],res_bcc}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{3}\NormalTok{],}\DataTypeTok{lower.tail =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## value 
+##     0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 4. Single Factor Regression - Tax class}
+\NormalTok{model1 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(nyc_pred.train}\OperatorTok{$}\StringTok{`}\DataTypeTok{SALE PRICE}\StringTok{`} \OperatorTok{~}\StringTok{ }\NormalTok{nyc_pred.train}\OperatorTok{$}\StringTok{`}\DataTypeTok{TAX CLASS AT TIME OF SALE}\StringTok{`}\NormalTok{)}
+\NormalTok{res_tax <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(model1)  }
+
+\NormalTok{res_tax}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = nyc_pred.train$`SALE PRICE` ~ nyc_pred.train$`TAX CLASS AT TIME OF SALE`)
+## 
+## Residuals:
+##        Min         1Q     Median         3Q        Max 
+##   -8278836    -992264    -348327      29743 2201719164 
+## 
+## Coefficients:
+##                                             Estimate
+## (Intercept)                                   748327
+## nyc_pred.train$`TAX CLASS AT TIME OF SALE`2   848937
+## nyc_pred.train$`TAX CLASS AT TIME OF SALE`4  7532509
+##                                             Std. Error
+## (Intercept)                                      83209
+## nyc_pred.train$`TAX CLASS AT TIME OF SALE`2     114891
+## nyc_pred.train$`TAX CLASS AT TIME OF SALE`4     286351
+##                                             t value
+## (Intercept)                                   8.993
+## nyc_pred.train$`TAX CLASS AT TIME OF SALE`2   7.389
+## nyc_pred.train$`TAX CLASS AT TIME OF SALE`4  26.305
+##                                                     Pr(>|t|)
+## (Intercept)                                          < 2e-16
+## nyc_pred.train$`TAX CLASS AT TIME OF SALE`2 0.00000000000015
+## nyc_pred.train$`TAX CLASS AT TIME OF SALE`4          < 2e-16
+##                                                
+## (Intercept)                                 ***
+## nyc_pred.train$`TAX CLASS AT TIME OF SALE`2 ***
+## nyc_pred.train$`TAX CLASS AT TIME OF SALE`4 ***
+## ---
+## Signif. codes:  
+## 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 12150000 on 46773 degrees of freedom
+## Multiple R-squared:  0.01465,    Adjusted R-squared:  0.01461 
+## F-statistic: 347.8 on 2 and 46773 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pf}\NormalTok{(res_tax}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{1}\NormalTok{],res_tax}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{2}\NormalTok{],res_tax}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{3}\NormalTok{],}\DataTypeTok{lower.tail =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         value 
+## 1.185745e-150
+\end{verbatim}
+
+All the levels are significant - so maintaining them.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 5. Single Factor Regression - Sale Month}
+\NormalTok{model1 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(nyc_pred.train}\OperatorTok{$}\StringTok{`}\DataTypeTok{SALE PRICE}\StringTok{`} \OperatorTok{~}\StringTok{ }\NormalTok{nyc_pred.train}\OperatorTok{$}\StringTok{`}\DataTypeTok{SALE MONTH}\StringTok{`}\NormalTok{)}
+\NormalTok{res_month <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(model1) }
+
+\NormalTok{res_month}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = nyc_pred.train$`SALE PRICE` ~ nyc_pred.train$`SALE MONTH`)
+## 
+## Residuals:
+##        Min         1Q     Median         3Q        Max 
+##   -2045037   -1102616    -820148    -371727 2207953853 
+## 
+## Coefficients:
+##                                       Estimate Std. Error
+## (Intercept)                          1354670.3   207225.1
+## nyc_pred.train$`SALE MONTH`August     -63054.0   293525.5
+## nyc_pred.train$`SALE MONTH`December   397056.9   280298.7
+## nyc_pred.train$`SALE MONTH`February   -67678.2   293546.8
+## nyc_pred.train$`SALE MONTH`January     61768.2   288377.7
+## nyc_pred.train$`SALE MONTH`July        32559.8   288377.7
+## nyc_pred.train$`SALE MONTH`June        87046.6   272966.2
+## nyc_pred.train$`SALE MONTH`March      105894.3   281388.8
+## nyc_pred.train$`SALE MONTH`May        691476.4   280740.0
+## nyc_pred.train$`SALE MONTH`November   127007.7   286906.6
+## nyc_pred.train$`SALE MONTH`October      -113.9   290572.7
+## nyc_pred.train$`SALE MONTH`September  142774.3   279417.4
+##                                      t value
+## (Intercept)                            6.537
+## nyc_pred.train$`SALE MONTH`August     -0.215
+## nyc_pred.train$`SALE MONTH`December    1.417
+## nyc_pred.train$`SALE MONTH`February   -0.231
+## nyc_pred.train$`SALE MONTH`January     0.214
+## nyc_pred.train$`SALE MONTH`July        0.113
+## nyc_pred.train$`SALE MONTH`June        0.319
+## nyc_pred.train$`SALE MONTH`March       0.376
+## nyc_pred.train$`SALE MONTH`May         2.463
+## nyc_pred.train$`SALE MONTH`November    0.443
+## nyc_pred.train$`SALE MONTH`October     0.000
+## nyc_pred.train$`SALE MONTH`September   0.511
+##                                             Pr(>|t|)    
+## (Intercept)                          0.0000000000633 ***
+## nyc_pred.train$`SALE MONTH`August             0.8299    
+## nyc_pred.train$`SALE MONTH`December           0.1566    
+## nyc_pred.train$`SALE MONTH`February           0.8177    
+## nyc_pred.train$`SALE MONTH`January            0.8304    
+## nyc_pred.train$`SALE MONTH`July               0.9101    
+## nyc_pred.train$`SALE MONTH`June               0.7498    
+## nyc_pred.train$`SALE MONTH`March              0.7067    
+## nyc_pred.train$`SALE MONTH`May                0.0138 *  
+## nyc_pred.train$`SALE MONTH`November           0.6580    
+## nyc_pred.train$`SALE MONTH`October            0.9997    
+## nyc_pred.train$`SALE MONTH`September          0.6094    
+## ---
+## Signif. codes:  
+## 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 12240000 on 46764 degrees of freedom
+## Multiple R-squared:  0.0002945,  Adjusted R-squared:  5.933e-05 
+## F-statistic: 1.252 on 11 and 46764 DF,  p-value: 0.2457
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \KeywordTok{pf}\NormalTok{(res_month}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{1}\NormalTok{],res_month}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{2}\NormalTok{],res_month}\OperatorTok{$}\NormalTok{fstatistic[}\DecValTok{3}\NormalTok{],}\DataTypeTok{lower.tail =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     value 
+## 0.2457146
+\end{verbatim}
+
+None of the levels of the month variable are significant.
+
+\hypertarget{multi-factor-linear-regression}{%
+\subsection{\texorpdfstring{\textbf{Multi Factor Linear
+Regression}}{Multi Factor Linear Regression}}\label{multi-factor-linear-regression}}
+
+Running full model based on the variables reduced from the above step.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\StringTok{`}\DataTypeTok{SALE PRICE}\StringTok{`} \OperatorTok{~}\StringTok{ }\NormalTok{.  }\OperatorTok{-}\StringTok{`}\DataTypeTok{SALE MONTH}\StringTok{`}\NormalTok{, }\DataTypeTok{data =}\NormalTok{ nyc_pred.train)}
+\end{Highlighting}
+\end{Shaded}
+
+Though the Adjusted R-squared value is quite high and the Model MSE is
+very large. This is likely due to the large degrees of freedom in the
+model. \textbf{Linear Regression is not the right predictor for this
+data}
+
+\textbf{NEXT STEPS:}
+
+Variable Reduction to be employed for the Zip Code variable.\\
+Variable selection methods to choose the optimal number of parameters.\\
+Employ cross-validation methods to test the out-of-sample error.\\
+Try other algorithms such as Random Forest.
+
+\newpage
+
+\hypertarget{conclusion}{%
+\section{\texorpdfstring{\textbf{Conclusion}}{Conclusion}}\label{conclusion}}
+
+Much of the work with the NYC Property Sales data was data cleaning.
+After the initial process of data cleaning (predominantly treating
+missing values), we identified many outliers within the Sales Price and
+Square footage numerical variables. Isolating these data points and
+exploring the points individually was valuable with this data set.
+\textbf{Linear regression does not factor the multiple levels of
+dependencies between the variables to effectively predict the property
+prices}
+
+\textbf{Insights:}
+
+With this exploratory data analysis of the NYC Property Sale Prices, we
+found many interesting trends.
+
+Property prices in NYC range from \$220,000 (10\% percentile of Property
+prices) all the way to \$2.2 billion (95\% percentile of Property
+prices). NYC has a place for everyone!
+
+Price per square footage in Manhattan is as high as \$16,000/sqft, while
+in Bloomfield, Staten Island is \$26/sqft. Move to Staten Island,
+everyone!
+
+Manhattan and Bronx sold the most residential condo apartments in large
+buildings/ residential societies, while Queens sold the most residential
+homes.
+
+\hypertarget{future-plans}{%
+\section{\texorpdfstring{\textbf{Future
+Plans}}{Future Plans}}\label{future-plans}}
+
+Finally we can conclude that there needs to be further analysis with the
+data. All the variables in the data set need to be tuned to perfectly
+complement the Property Sales business.
+
+We need to use K Nearest Neighbors(KNN) to group the records as per the
+available features and may be try Random Forest to effective factor in
+all the various avenues of this data and predict the property prices.
+
+Another suggestion would be convert this into a categorical problem
+rather than regression, by converting the property prices into ranges
+based on neighborhoods, boroughs and age of buildings and then predict
+the range to at least narrow it down to a ball park estimate of the real
+price.
+
+\end{document}
